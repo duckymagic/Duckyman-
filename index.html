@@ -14,24 +14,37 @@
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-  <!-- SVG Gradient for shiny metallic effect -->
   <style>
-    /* Gradient Background for shiny metallic effect */
+    /* Shiny Gel-like text with SVG gradient */
+    .gel-text {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: calc(26px + 6vw);
+      background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 100"%3E%3Cdefs%3E%3ClinearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%"%3E%3Cstop offset="0%" style="stop-color:%23ffffff;stop-opacity:1" /%3E%3Cstop offset="100%" style="stop-color:%23a1b0b5;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x="50%" y="50%" font-size="60" text-anchor="middle" dy=".35em" fill="url(%23grad1)" stroke="url(%23grad1)" stroke-width="2"%3E$DuckyMan%3C/text%3E%3C/svg%3E') no-repeat center center;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 0.5),
+        0 0 10px rgba(255, 255, 255, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
     .shiny-metallic-bg {
-      background: linear-gradient(135deg, #f0f4f8 25%, #a1b0b5 50%, #c8d0d4 75%), url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53c3b3+uNQkYo3oRATDgs9sdWDthxgy9oa64NDEdD4Y2scZvkpTw') repeat;
-      background-blend-mode: overlay;
+      background: linear-gradient(135deg, #f0f4f8 25%, #a1b0b5 50%, #c8d0d4 75%);
       filter: brightness(1.2);
     }
+
   </style>
+
 </head>
 <body class="bg-gradient-to-b from-green-200 to-teal-600 min-h-screen shiny-metallic-bg">
 
   <!-- Main content container -->
   <div class="container mx-auto flex flex-col items-center justify-center min-h-screen">
 
-    <!-- Dynamic Header with DuckyMan title and margin -->
-    <h1 class="text-teal-800 font-bold text-center mb-12" 
-        style="font-family: 'Luckiest Guy', cursive; font-size: calc(26px + 6vw); text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin-left: 20%; margin-right: 20%; margin-top: 40px;">
+    <!-- Dynamic Header with DuckyMan title -->
+    <h1 class="gel-text mb-12" style="margin-left: 20%; margin-right: 20%; margin-top: 40px;">
       $DuckyMan
     </h1>
 
