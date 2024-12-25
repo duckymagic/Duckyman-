@@ -11,28 +11,33 @@
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
   <style>
-    /* Shiny Gel-like text with SVG gradient */
+    /* 3D Raised Text with Gradient and Gloss Effect */
     .gel-text {
       font-family: 'Luckiest Guy', cursive;
       font-size: calc(26px + 6vw);
-      background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 100"%3E%3Cdefs%3E%3ClinearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%"%3E%3Cstop offset="0%" style="stop-color:%23ffffff;stop-opacity:1" /%3E%3Cstop offset="100%" style="stop-color:%23a1b0b5;stop-opacity:1" /%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x="50%" y="50%" font-size="60" text-anchor="middle" dy=".35em" fill="url(%23grad1)" stroke="url(%23grad1)" stroke-width="2"%3E$DuckyMan%3C/text%3E%3C/svg%3E') no-repeat center center;
-      -webkit-background-clip: text;
-      background-clip: text;
+      background: linear-gradient(135deg, #9cdb8e, #41b57e); /* Metallic green gradient */
       color: transparent;
+      background-clip: text;
       text-shadow: 
-        1px 1px 2px rgba(0, 0, 0, 0.5),
-        0 0 10px rgba(255, 255, 255, 0.3),
-        0 0 30px rgba(255, 255, 255, 0.1);
+        0 1px 0 rgba(0, 0, 0, 0.15),
+        0 2px 5px rgba(0, 0, 0, 0.3), /* Soft shadow to create depth */
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 0 10px rgba(255, 255, 255, 0.2); /* Glossy glow */
       text-align: center;
+      letter-spacing: 2px; /* Add some space between letters for better 3D effect */
+      display: inline-block;
     }
 
+    /* Shiny metallic background for the body */
     .shiny-metallic-bg {
       background: linear-gradient(135deg, #f0f4f8 25%, #a1b0b5 50%, #c8d0d4 75%);
       filter: brightness(1.2);
+    }
+
+    /* Margin for cards */
+    .card {
+      margin: 10px;
     }
 
   </style>
@@ -44,11 +49,11 @@
   <div class="container mx-auto flex flex-col items-center justify-center min-h-screen">
 
     <!-- Dynamic Header with DuckyMan title -->
-    <h1 class="gel-text mb-12" style="margin-left: 20%; margin-right: 20%; margin-top: 40px;">
+    <h1 class="gel-text mb-12 mt-6" style="margin-left: 20%; margin-right: 20%; padding-top: 25px;">
       $DuckyMan
     </h1>
 
-    <!-- Grid of Cards -->
+    <!-- Grid of Cards with 10px margin around -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
       <!-- Tokens Created Card -->
       <div class="card bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-xl">
