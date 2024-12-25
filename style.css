@@ -1,0 +1,34 @@
+/* styles.css */
+
+/* Animation for letter grow/shrink */
+@keyframes growShrink {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+/* Apply animation to individual letters in the title */
+.header-title span {
+  display: inline-block;
+  animation: growShrink 5s ease-in-out infinite;
+}
+
+/* Staggering animation delays for each letter */
+.header-title span:nth-child(1) { animation-delay: 0s; }
+.header-title span:nth-child(2) { animation-delay: 0.1s; }
+.header-title span:nth-child(3) { animation-delay: 0.2s; }
+.header-title span:nth-child(4) { animation-delay: 0.3s; }
+.header-title span:nth-child(5) { animation-delay: 0.4s; }
+.header-title span:nth-child(6) { animation-delay: 0.5s; }
+.header-title span:nth-child(7) { animation-delay: 0.6s; }
+.header-title span:nth-child(8) { animation-delay: 0.7s; }
+.header-title span:nth-child(9) { animation-delay: 0.8s; }
+
+/* Add a text shadow and outline to the title */
+.header-title {
+  text-shadow: 3px 3px 6px rgba(0, 50, 30, 0.4); /* Dark green shadow */
+  -webkit-text-stroke: 3px #006d46; /* Darker green outline */
+}
