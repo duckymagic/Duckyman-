@@ -3,48 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebSocket Web App</title>
+  <title>WebSocket Integration</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
+    /* Custom Gradient Background */
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
+      background: linear-gradient(to bottom, #8df4bc, #3f9a8b);
+      font-family: 'Roboto', sans-serif;
     }
-    h1 {
-      text-align: center;
-      padding: 20px;
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
     }
-    #log {
-      max-width: 100%;
-      margin: 20px;
-      padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      max-height: 400px;
+
+    .card-header {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #3f9a8b;
+    }
+
+    .card-body {
+      max-height: 300px;
       overflow-y: auto;
+      font-size: 0.875rem;
     }
+
+    .log-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .log-item i {
+      margin-right: 10px;
+      font-size: 1.25rem;
+      color: #3f9a8b;
+    }
+
+    .log-item.newToken {
+      background-color: #e0f7fa;
+    }
+
+    .log-item.accountTrade {
+      background-color: #e8f5e9;
+    }
+
+    .log-item.tokenTrade {
+      background-color: #f3e5f5;
+    }
+
   </style>
 </head>
 <body>
 
-  <h1>WebSocket Connection Log</h1>
-  <div id="log"></div>
+  <div class="container mx-auto p-8">
+
+    <!-- Header -->
+    <h1 class="text-4xl font-extrabold text-center text-white mb-8">WebSocket Data Log</h1>
+
+    <!-- New Tokens Section -->
+    <div class="card">
+      <div class="card-header text-teal-600">
+        <i class="fas fa-coins"></i> New Tokens
+      </div>
+      <div id="newTokens" class="card-body bg-teal-50 text-teal-800"></div>
+    </div>
+
+    <!-- Account Trades Section -->
+    <div class="card">
+      <div class="card-header text-green-600">
+        <i class="fas fa-user-circle"></i> Account Trades
+      </div>
+      <div id="accountTrades" class="card-body bg-green-50 text-green-800"></div>
+    </div>
+
+    <!-- Token Trades Section -->
+    <div class="card">
+      <div class="card-header text-purple-600">
+        <i class="fas fa-exchange-alt"></i> Token Trades
+      </div>
+      <div id="tokenTrades" class="card-body bg-purple-50 text-purple-800"></div>
+    </div>
+
+  </div>
 
   <script>
-    const logContainer = document.getElementById("log");
+    const newTokensContainer = document.getElementById("newTokens");
+    const accountTradesContainer = document.getElementById("accountTrades");
+    const tokenTradesContainer = document.getElementById("tokenTrades");
 
-    // Establish WebSocket connection
+    // WebSocket connection
     const ws = new WebSocket('wss://pumpportal.fun/api/data');
 
     ws.onopen = function() {
-      logMessage("WebSocket connection established.");
+      console.log("WebSocket connection established.");
 
       // Subscribe to new token creation events
       let payload = { method: "subscribeNewToken" };
       ws.send(JSON.stringify(payload));
-      logMessage('Subscribed to new token creation.');
 
       // Subscribe to account trade events
       payload = {
@@ -52,7 +123,6 @@
         keys: ["AArPXm8JatJiuyEffuC1un2Sc835SULa4uQqDcaGpAjV"]
       };
       ws.send(JSON.stringify(payload));
-      logMessage('Subscribed to account trade events.');
 
       // Subscribe to token trade events
       payload = {
@@ -60,31 +130,57 @@
         keys: ["91WNez8D22NwBssQbkzjy4s2ipFrzpmn5hfvWVe2aY5p"]
       };
       ws.send(JSON.stringify(payload));
-      logMessage('Subscribed to token trade events.');
     };
 
     ws.onmessage = function(event) {
       try {
         const data = JSON.parse(event.data);
-        logMessage(`Received: ${JSON.stringify(data)}`);
+
+        if (data.method === 'newToken') {
+          displayNewToken(data.data);
+        }
+
+        if (data.method === 'accountTrade') {
+          displayAccountTrade(data.data);
+        }
+
+        if (data.method === 'tokenTrade') {
+          displayTokenTrade(data.data);
+        }
       } catch (error) {
-        logMessage(`Error parsing message: ${error}`);
+        console.error('Error parsing message:', error);
       }
     };
 
+    function displayNewToken(token) {
+      const tokenElement = document.createElement('div');
+      tokenElement.classList.add('log-item', 'newToken');
+      tokenElement.innerHTML = `<i class="fas fa-coins"></i><strong>Token Created:</strong> ${JSON.stringify(token)}`;
+      newTokensContainer.appendChild(tokenElement);
+    }
+
+    function displayAccountTrade(trade) {
+      const tradeElement = document.createElement('div');
+      tradeElement.classList.add('log-item', 'accountTrade');
+      tradeElement.innerHTML = `<i class="fas fa-user-circle"></i><strong>Account Trade:</strong> ${JSON.stringify(trade)}`;
+      accountTradesContainer.appendChild(tradeElement);
+    }
+
+    function displayTokenTrade(trade) {
+      const tradeElement = document.createElement('div');
+      tradeElement.classList.add('log-item', 'tokenTrade');
+      tradeElement.innerHTML = `<i class="fas fa-exchange-alt"></i><strong>Token Trade:</strong> ${JSON.stringify(trade)}`;
+      tokenTradesContainer.appendChild(tradeElement);
+    }
+
     ws.onerror = function(error) {
-      logMessage(`WebSocket error: ${error.message}`);
+      console.error(`WebSocket error: ${error.message}`);
     };
 
     ws.onclose = function() {
-      logMessage("WebSocket connection closed.");
+      console.log("WebSocket connection closed.");
     };
 
-    function logMessage(message) {
-      const messageElement = document.createElement("div");
-      messageElement.textContent = message;
-      logContainer.appendChild(messageElement);
-    }
   </script>
 
 </body>
