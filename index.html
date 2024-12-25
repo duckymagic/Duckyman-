@@ -8,30 +8,37 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 
+  <!-- TailwindCSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- Link to External CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="bg-gradient-to-br from-green-200 via-teal-300 to-green-400 min-h-screen flex flex-col items-center">
+
   <!-- Header -->
-  <h1 class="gel-text">$DuckyMan</h1>
+  <h1 class="text-white text-6xl md:text-7xl font-extrabold fade-in raised-text mt-2"
+      style="font-family: 'Luckiest Guy', cursive;">
+    $DuckyMan
+  </h1>
 
   <!-- Grid of Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-4 fade-in">
     <!-- Tokens Created Card -->
-    <div class="card">
-      <div class="text-lg font-semibold mb-4">Tokens Created</div>
+    <div class="bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-lg">
+      <div class="text-lg font-semibold text-teal-800 mb-4">Tokens Created</div>
       <div class="text-gray-700">No account trades available yet.</div>
     </div>
 
     <!-- Transactions Card -->
-    <div class="card">
-      <div class="text-lg font-semibold mb-4">Transactions</div>
+    <div class="bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-lg">
+      <div class="text-lg font-semibold text-teal-800 mb-4">Transactions</div>
       <div class="text-gray-700">No account trades available yet.</div>
     </div>
 
     <!-- Account Trades Card -->
-    <div class="card">
-      <div class="text-lg font-semibold mb-4">Account Trades</div>
+    <div class="bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-lg">
+      <div class="text-lg font-semibold text-teal-800 mb-4">Account Trades</div>
       <div class="text-gray-700">No account trades available yet.</div>
     </div>
   </div>
