@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Duckyman WebSocket Data</title>
+  <title>$DuckyMan</title>
   
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts (Luckiest Guy for the header) -->
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -83,11 +83,12 @@
 
     /* Centered Header */
     .header-title {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 700;
       text-align: center;
       color: white;
       margin-bottom: 3rem;
+      font-family: 'Luckiest Guy', cursive;
     }
   </style>
 </head>
@@ -96,14 +97,14 @@
   <div class="container">
 
     <!-- Header -->
-    <h1 class="header-title">Duckyman WebSocket Data Log</h1>
+    <h1 class="header-title">$DuckyMan</h1>
 
     <!-- New Tokens Section -->
     <div class="card">
       <div class="card-header text-teal-600">
         <i class="fas fa-coins"></i> New Tokens
       </div>
-      <div id="newTokens" class="card-body bg-teal-50 text-teal-800"></div>
+      <div class="card-body bg-teal-50 text-teal-800">No tokens available yet.</div>
     </div>
 
     <!-- Account Trades Section -->
@@ -111,7 +112,7 @@
       <div class="card-header text-green-600">
         <i class="fas fa-user-circle"></i> Account Trades
       </div>
-      <div id="accountTrades" class="card-body bg-green-50 text-green-800"></div>
+      <div class="card-body bg-green-50 text-green-800">No account trades available yet.</div>
     </div>
 
     <!-- Token Trades Section -->
@@ -119,91 +120,10 @@
       <div class="card-header text-purple-600">
         <i class="fas fa-exchange-alt"></i> Token Trades
       </div>
-      <div id="tokenTrades" class="card-body bg-purple-50 text-purple-800"></div>
+      <div class="card-body bg-purple-50 text-purple-800">No token trades available yet.</div>
     </div>
 
   </div>
-
-  <script>
-    const newTokensContainer = document.getElementById("newTokens");
-    const accountTradesContainer = document.getElementById("accountTrades");
-    const tokenTradesContainer = document.getElementById("tokenTrades");
-
-    // WebSocket connection
-    const ws = new WebSocket('wss://pumpportal.fun/api/data');
-
-    ws.onopen = function() {
-      console.log("WebSocket connection established.");
-
-      // Subscribe to new token creation events
-      let payload = { method: "subscribeNewToken" };
-      ws.send(JSON.stringify(payload));
-
-      // Subscribe to account trade events
-      payload = {
-        method: "subscribeAccountTrade",
-        keys: ["AArPXm8JatJiuyEffuC1un2Sc835SULa4uQqDcaGpAjV"]
-      };
-      ws.send(JSON.stringify(payload));
-
-      // Subscribe to token trade events
-      payload = {
-        method: "subscribeTokenTrade",
-        keys: ["91WNez8D22NwBssQbkzjy4s2ipFrzpmn5hfvWVe2aY5p"]
-      };
-      ws.send(JSON.stringify(payload));
-    };
-
-    ws.onmessage = function(event) {
-      try {
-        const data = JSON.parse(event.data);
-
-        if (data.method === 'newToken') {
-          displayNewToken(data.data);
-        }
-
-        if (data.method === 'accountTrade') {
-          displayAccountTrade(data.data);
-        }
-
-        if (data.method === 'tokenTrade') {
-          displayTokenTrade(data.data);
-        }
-      } catch (error) {
-        console.error('Error parsing message:', error);
-      }
-    };
-
-    function displayNewToken(token) {
-      const tokenElement = document.createElement('div');
-      tokenElement.classList.add('log-item', 'newToken');
-      tokenElement.innerHTML = `<i class="fas fa-coins"></i><strong>Token Created:</strong> ${JSON.stringify(token)}`;
-      newTokensContainer.appendChild(tokenElement);
-    }
-
-    function displayAccountTrade(trade) {
-      const tradeElement = document.createElement('div');
-      tradeElement.classList.add('log-item', 'accountTrade');
-      tradeElement.innerHTML = `<i class="fas fa-user-circle"></i><strong>Account Trade:</strong> ${JSON.stringify(trade)}`;
-      accountTradesContainer.appendChild(tradeElement);
-    }
-
-    function displayTokenTrade(trade) {
-      const tradeElement = document.createElement('div');
-      tradeElement.classList.add('log-item', 'tokenTrade');
-      tradeElement.innerHTML = `<i class="fas fa-exchange-alt"></i><strong>Token Trade:</strong> ${JSON.stringify(trade)}`;
-      tokenTradesContainer.appendChild(tradeElement);
-    }
-
-    ws.onerror = function(error) {
-      console.error(`WebSocket error: ${error.message}`);
-    };
-
-    ws.onclose = function() {
-      console.log("WebSocket connection closed.");
-    };
-
-  </script>
 
 </body>
 </html>
