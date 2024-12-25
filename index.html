@@ -5,73 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>$DuckyMan</title>
 
-  <!-- Google Fonts (Luckiest Guy for the header) -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    /* 3D Raised Text with Gradient and Gloss Effect */
-    .gel-text {
-      font-family: 'Luckiest Guy', cursive;
-      font-size: calc(26px + 6vw);
-      background: linear-gradient(135deg, #9cdb8e, #41b57e); /* Metallic green gradient */
-      color: transparent;
-      background-clip: text;
-      text-shadow: 
-        0 1px 0 rgba(0, 0, 0, 0.15),
-        0 2px 5px rgba(0, 0, 0, 0.3), /* Soft shadow to create depth */
-        0 1px 3px rgba(0, 0, 0, 0.2),
-        0 0 10px rgba(255, 255, 255, 0.2); /* Glossy glow */
-      text-align: center;
-      letter-spacing: 2px; /* Add some space between letters for better 3D effect */
-      display: inline-block;
-    }
-
-    /* Shiny metallic background for the body */
-    .shiny-metallic-bg {
-      background: linear-gradient(135deg, #f0f4f8 25%, #a1b0b5 50%, #c8d0d4 75%);
-      filter: brightness(1.2);
-    }
-
-    /* Margin for cards */
-    .card {
-      margin: 10px;
-    }
-
-  </style>
-
 </head>
-<body class="bg-gradient-to-b from-green-200 to-teal-600 min-h-screen shiny-metallic-bg">
+<body class="bg-gradient-to-b from-green-300 to-teal-500 min-h-screen flex flex-col items-center justify-center text-center">
 
-  <!-- Main content container -->
-  <div class="container mx-auto flex flex-col items-center justify-center min-h-screen">
+  <!-- Header Text -->
+  <h1 class="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-green-200 to-teal-300 drop-shadow-lg mb-12"
+      style="font-family: 'Luckiest Guy', cursive; margin-top: 25px;">
+    $DuckyMan
+  </h1>
 
-    <!-- Dynamic Header with DuckyMan title -->
-    <h1 class="gel-text mb-12 mt-6" style="margin-left: 20%; margin-right: 20%; padding-top: 25px;">
-      $DuckyMan
-    </h1>
+  <!-- Grid of Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full">
+    <!-- Tokens Created Card -->
+    <div class="bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-xl">
+      <div class="text-lg font-semibold text-teal-800 mb-4">Tokens Created</div>
+      <div class="text-gray-700">No account trades available yet.</div>
+    </div>
 
-    <!-- Grid of Cards with 10px margin around -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
-      <!-- Tokens Created Card -->
-      <div class="card bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-xl">
-        <div class="text-lg font-semibold text-teal-800 mb-4">Tokens Created</div>
-        <div class="text-gray-700">No account trades available yet.</div>
-      </div>
+    <!-- Transactions Card -->
+    <div class="bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-xl">
+      <div class="text-lg font-semibold text-teal-800 mb-4">Transactions</div>
+      <div class="text-gray-700">No account trades available yet.</div>
+    </div>
 
-      <!-- Transactions Card -->
-      <div class="card bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-xl">
-        <div class="text-lg font-semibold text-teal-800 mb-4">Transactions</div>
-        <div class="text-gray-700">No account trades available yet.</div>
-      </div>
-
-      <!-- Account Trades Card -->
-      <div class="card bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-xl">
-        <div class="text-lg font-semibold text-teal-800 mb-4">Account Trades</div>
-        <div class="text-gray-700">No account trades available yet.</div>
-      </div>
+    <!-- Account Trades Card -->
+    <div class="bg-gradient-to-r from-green-100 to-teal-100 p-6 rounded-lg shadow-xl">
+      <div class="text-lg font-semibold text-teal-800 mb-4">Account Trades</div>
+      <div class="text-gray-700">No account trades available yet.</div>
     </div>
   </div>
 
