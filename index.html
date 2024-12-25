@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebSocket Integration</title>
+  <title>Duckyman WebSocket Data</title>
   
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -11,13 +11,25 @@
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
+  <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Custom Gradient Background */
-    body {
-      background: linear-gradient(to bottom, #8df4bc, #3f9a8b);
+    /* Full Viewport Height Background */
+    body, html {
+      height: 100%;
+      margin: 0;
       font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to bottom, #8df4bc, #3f9a8b); /* Seafoam Green Gradient */
+    }
+
+    .container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1rem;
     }
 
     .card {
@@ -26,6 +38,8 @@
       padding: 16px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       margin-bottom: 1rem;
+      width: 100%;
+      max-width: 800px;
     }
 
     .card-header {
@@ -67,14 +81,22 @@
       background-color: #f3e5f5;
     }
 
+    /* Centered Header */
+    .header-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      color: white;
+      margin-bottom: 3rem;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container mx-auto p-8">
+  <div class="container">
 
     <!-- Header -->
-    <h1 class="text-4xl font-extrabold text-center text-white mb-8">WebSocket Data Log</h1>
+    <h1 class="header-title">Duckyman WebSocket Data Log</h1>
 
     <!-- New Tokens Section -->
     <div class="card">
