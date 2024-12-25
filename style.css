@@ -1,34 +1,22 @@
-/* styles.css */
-
-/* Animation for letter grow/shrink */
-@keyframes growShrink {
-  0%, 100% {
-    transform: scale(1);
+/* Fade-in animation for elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  50% {
-    transform: scale(1.03);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Apply animation to individual letters in the title */
-.header-title span {
-  display: inline-block;
-  animation: growShrink 5s ease-in-out infinite;
+.fade-in {
+  animation: fadeIn 1.5s ease-out;
 }
 
-/* Staggering animation delays for each letter */
-.header-title span:nth-child(1) { animation-delay: 0s; }
-.header-title span:nth-child(2) { animation-delay: 0.1s; }
-.header-title span:nth-child(3) { animation-delay: 0.2s; }
-.header-title span:nth-child(4) { animation-delay: 0.3s; }
-.header-title span:nth-child(5) { animation-delay: 0.4s; }
-.header-title span:nth-child(6) { animation-delay: 0.5s; }
-.header-title span:nth-child(7) { animation-delay: 0.6s; }
-.header-title span:nth-child(8) { animation-delay: 0.7s; }
-.header-title span:nth-child(9) { animation-delay: 0.8s; }
-
-/* Add a text shadow and outline to the title */
-.header-title {
-  text-shadow: 3px 3px 6px rgba(0, 50, 30, 0.4); /* Dark green shadow */
-  -webkit-text-stroke: 3px #006d46; /* Darker green outline */
+/* Custom raised text-shadow for $DuckyMan */
+.raised-text {
+  text-shadow: 
+    0px 2px 4px rgba(0, 0, 0, 0.25), /* Subtle drop shadow */
+    0px 4px 8px rgba(0, 0, 0, 0.15); /* Softer extended shadow */
 }
