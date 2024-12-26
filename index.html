@@ -59,47 +59,7 @@
     </div>
   </div>
 
-  <!-- JavaScript to Fetch Real-Time Data -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const ws = new WebSocket('wss://pumpportal.fun/api/data');
-
-      ws.addEventListener('open', () => {
-        console.log('WebSocket connected');
-
-        // Subscribe to Token Creation Events
-        ws.send(JSON.stringify({ method: 'subscribeNewToken' }));
-
-        // Subscribe to Transactions
-        ws.send(JSON.stringify({ method: 'subscribeAccountTrade' }));
-
-        // Subscribe to Token Trades
-        ws.send(JSON.stringify({ method: 'subscribeTokenTrade' }));
-      });
-
-      ws.addEventListener('message', (event) => {
-        const data = JSON.parse(event.data);
-
-        if (data.event === 'newToken') {
-          document.getElementById('tokens-created-content').textContent =
-            `New Token: ${data.tokenName || 'N/A'}`;
-        } else if (data.event === 'accountTrade') {
-          document.getElementById('transactions-content').textContent =
-            `Trade: ${data.tradeDetails || 'Details unavailable'}`;
-        } else if (data.event === 'tokenTrade') {
-          document.getElementById('account-trades-content').textContent =
-            `Token Trade: ${data.tokenTradeDetails || 'Details unavailable'}`;
-        }
-      });
-
-      ws.addEventListener('error', (error) => {
-        console.error('WebSocket Error:', error);
-      });
-
-      ws.addEventListener('close', () => {
-        console.log('WebSocket closed');
-      });
-    });
-  </script>
+  <!-- Link to External JavaScript -->
+  <script src="websocket.js"></script>
 </body>
 </html>
