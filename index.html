@@ -18,7 +18,32 @@
     style="font-family: 'Luckiest Guy', cursive;">
     DuckyMan
   </h1>
-
+<div class="grid auto-cols-max grid-flow-col gap-5 text-center">
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:15;"></span>
+    </span>
+    days
+  </div>
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:10;"></span>
+    </span>
+    hours
+  </div>
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:24;"></span>
+    </span>
+    min
+  </div>
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:${counter};"></span>
+    </span>
+    sec
+  </div>
+</div>
   <!-- Grid of Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
     <!-- Tokens Created Card -->
