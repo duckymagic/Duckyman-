@@ -10,45 +10,31 @@
 
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    /* Gradient Border Effect Around Text */
-    .text-gradient-border {
-      position: relative;
-      display: inline-block;
-      color: #d6d8d6ff; /* Font color */
-      font-size: calc(1.5rem + 4vw); /* Responsive font size */
-      font-family: 'Luckiest Guy', cursive;
-      text-shadow: 
-        0 -1px 2px rgba(255, 255, 255, 0.6), /* Light top border */
-        0 2px 2px rgba(214, 216, 214, 1),    /* Slightly lighter middle */
-        0 4px 6px rgba(83, 133, 115, 0.8);   /* Darker bottom shadow */
-    }
-  </style>
 </head>
 <body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
   <!-- Header -->
-  <h1 class="text-gradient-border mt-5 drop-shadow-lg">
+  <h1 class="text-transparent bg-clip-text bg-gradient-to-br from-[#e8eae8] to-[#616d66] font-extrabold drop-shadow-lg mt-5 text-[calc(1.5rem+4vw)]"
+      style="font-family: 'Luckiest Guy', cursive;">
     $DuckyMan
   </h1>
 
   <!-- Grid of Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
     <!-- Tokens Created Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg">
+    <div class="bg-gradient-to-br from-[#e8eae8] to-[#616d66] p-6 rounded-lg shadow-lg border border-white">
       <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
       <div class="text-gray-700">No account trades available yet.</div>
     </div>
 
     <!-- Transactions Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg">
+    <div class="bg-gradient-to-br from-[#e8eae8] to-[#616d66] p-6 rounded-lg shadow-lg border border-white">
       <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
       <div class="text-gray-700">No account trades available yet.</div>
     </div>
 
     <!-- Account Trades Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg">
+    <div class="bg-gradient-to-br from-[#e8eae8] to-[#616d66] p-6 rounded-lg shadow-lg border border-white">
       <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
       <div class="text-gray-700">No account trades available yet.</div>
     </div>
