@@ -19,18 +19,11 @@
             responsive: 'calc(1.5rem + 4vw)',
           },
           textStrokeWidth: {
-          thin: '1px',
+            thin: '1px',
           },
           colors: {
-          light: '#e8eae8',
-          dark: '#616d66'
-          },
-          textShadow: {
-            gradient: [
-              '-1px -1px 2px rgba(255, 255, 255, 0.6)',
-              '-1px 1px 2px rgba(214, 216, 214, 1)',
-              '-1px 4px 6px rgba(83, 133, 115, 0.8)',
-            ],
+            light: '#e8eae8',
+            dark: '#616d66',
           },
         },
       },
@@ -42,28 +35,69 @@
   <!-- Header -->
   <h1 class="text-[#d6d8d6] font-extrabold text-[calc(1.5rem+4vw)] mt-5 drop-shadow-lg bg-gradient-to-br from-light to-dark bg-clip-text text-stroke-thin"
     style="font-family: 'Luckiest Guy', cursive;">
-  DuckyMan
-</h1>
+    DuckyMan
+  </h1>
 
   <!-- Grid of Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
     <!-- Tokens Created Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+    <div id="tokens-created" class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
       <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
-      <div class="text-gray-700">No account trades available yet.</div>
+      <div id="tokens-created-content" class="text-gray-700">Loading...</div>
     </div>
 
     <!-- Transactions Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+    <div id="transactions" class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
       <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
-      <div class="text-gray-700">No account trades available yet.</div>
+      <div id="transactions-content" class="text-gray-700">Loading...</div>
     </div>
 
     <!-- Account Trades Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+    <div id="account-trades" class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
       <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
-      <div class="text-gray-700">No account trades available yet.</div>
+      <div id="account-trades-content" class="text-gray-700">Loading...</div>
     </div>
   </div>
+
+  <!-- JavaScript to Fetch Real-Time Data -->
+  <script>
+    const ws = new WebSocket('wss://pumpportal.fun/api/data');
+
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+
+      // Subscribe to Token Creation Events
+      ws.send(JSON.stringify({ method: 'subscribeNewToken' }));
+
+      // Subscribe to Transactions
+      ws.send(JSON.stringify({ method: 'subscribeAccountTrade' }));
+
+      // Subscribe to Token Trades
+      ws.send(JSON.stringify({ method: 'subscribeTokenTrade' }));
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.event === 'newToken') {
+        document.getElementById('tokens-created-content').textContent =
+          `New Token Created: ${data.tokenName}`;
+      } else if (data.event === 'accountTrade') {
+        document.getElementById('transactions-content').textContent =
+          `Trade: ${data.tradeDetails}`;
+      } else if (data.event === 'tokenTrade') {
+        document.getElementById('account-trades-content').textContent =
+          `Token Trade: ${data.tokenTradeDetails}`;
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket Error:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket closed');
+    };
+  </script>
 </body>
 </html>
