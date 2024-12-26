@@ -65,7 +65,7 @@
     </div>
   </div>
 <script>
-  // Set the countdown target date
+ // Set the countdown target date
 const targetDate = new Date('2024-12-31T23:59:59Z');
 
 // Function to update the countdown
@@ -74,10 +74,10 @@ function updateCountdown() {
   const diff = targetDate - now;
 
   if (diff <= 0) {
-    document.getElementById('days').textContent = '0';
-    document.getElementById('hours').textContent = '00';
-    document.getElementById('minutes').textContent = '00';
-    document.getElementById('seconds').textContent = '00';
+    document.querySelector('[style="--value:15;"]').setAttribute('style', '--value:0;');
+    document.querySelector('[style="--value:10;"]').setAttribute('style', '--value:0;');
+    document.querySelector('[style="--value:24;"]').setAttribute('style', '--value:0;');
+    document.querySelector('[style="--value:${counter};"]').setAttribute('style', '--value:0;');
     return;
   }
 
@@ -86,10 +86,11 @@ function updateCountdown() {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-  document.getElementById('days').textContent = days;
-  document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-  document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-  document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+  // Dynamically update the values
+  document.querySelector('[style="--value:15;"]').setAttribute('style', `--value:${days};`);
+  document.querySelector('[style="--value:10;"]').setAttribute('style', `--value:${hours};`);
+  document.querySelector('[style="--value:24;"]').setAttribute('style', `--value:${minutes};`);
+  document.querySelector('[style="--value:${counter};"]').setAttribute('style', `--value:${seconds};`);
 }
 
 // Update the countdown every second
