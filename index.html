@@ -18,68 +18,86 @@
     style="font-family: 'Luckiest Guy', cursive;">
     DuckyMan
   </h1>
+<div class="grid auto-cols-max grid-flow-col gap-5 text-center">
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:15;"></span>
+    </span>
+    days
+  </div>
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:10;"></span>
+    </span>
+    hours
+  </div>
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:24;"></span>
+    </span>
+    min
+  </div>
+  <div class="flex flex-col">
+    <span class="countdown font-mono text-5xl">
+      <span style="--value:${counter};"></span>
+    </span>
+    sec
+  </div>
+</div>
+  <!-- Grid of Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
+    <!-- Tokens Created Card -->
+    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+      <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
+      <div id="tokens-created-content" class="text-gray-700">Waiting for data...</div>
+    </div>
 
-  <!-- Countdown Component -->
-  <div class="grid auto-cols-max grid-flow-col gap-5 text-center mt-10">
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="days" style="--value:0;"></span>
-      </span>
-      days
+    <!-- Transactions Card -->
+    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+      <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
+      <div id="transactions-content" class="text-gray-700">Waiting for data...</div>
     </div>
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="hours" style="--value:0;"></span>
-      </span>
-      hours
-    </div>
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="minutes" style="--value:0;"></span>
-      </span>
-      min
-    </div>
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="seconds" style="--value:0;"></span>
-      </span>
-      sec
+
+    <!-- Account Trades Card -->
+    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+      <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
+      <div id="account-trades-content" class="text-gray-700">Waiting for data...</div>
     </div>
   </div>
+<script>
+ // Set the countdown target date
+const targetDate = new Date('2024-12-31T23:59:59Z');
 
-  <!-- JavaScript for Countdown -->
-  <script>
-    // Set the countdown target date
-    const targetDate = new Date('2024-12-31T23:59:59Z');
+// Function to update the countdown
+function updateCountdown() {
+  const now = new Date();
+  const diff = targetDate - now;
 
-    // Function to update the countdown
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
+  if (diff <= 0) {
+    document.querySelector('[style="--value:15;"]').setAttribute('style', '--value:0;');
+    document.querySelector('[style="--value:10;"]').setAttribute('style', '--value:0;');
+    document.querySelector('[style="--value:24;"]').setAttribute('style', '--value:0;');
+    document.querySelector('[style="--value:${counter};"]').setAttribute('style', '--value:0;');
+    return;
+  }
 
-      if (diff <= 0) {
-        document.querySelector('[data-count="days"]').setAttribute('style', '--value:0;');
-        document.querySelector('[data-count="hours"]').setAttribute('style', '--value:0;');
-        document.querySelector('[data-count="minutes"]').setAttribute('style', '--value:0;');
-        document.querySelector('[data-count="seconds"]').setAttribute('style', '--value:0;');
-        return;
-      }
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+  // Dynamically update the values
+  document.querySelector('[style="--value:15;"]').setAttribute('style', `--value:${days};`);
+  document.querySelector('[style="--value:10;"]').setAttribute('style', `--value:${hours};`);
+  document.querySelector('[style="--value:24;"]').setAttribute('style', `--value:${minutes};`);
+  document.querySelector('[style="--value:${counter};"]').setAttribute('style', `--value:${seconds};`);
+}
 
-      // Update the countdown values dynamically
-      document.querySelector('[data-count="days"]').setAttribute('style', `--value:${days};`);
-      document.querySelector('[data-count="hours"]').setAttribute('style', `--value:${hours};`);
-      document.querySelector('[data-count="minutes"]').setAttribute('style', `--value:${minutes};`);
-      document.querySelector('[data-count="seconds"]').setAttribute('style', `--value:${seconds};`);
-    }
-
-    // Update the countdown every second
-    setInterval(updateCountdown, 1000);
-    updateCountdown(); // Run initially to avoid delay
-  </script>
+// Update the countdown every second
+setInterval(updateCountdown, 1000);
+updateCountdown(); // Run initially to avoid delay
+</script>
+  <!-- Link to External JavaScript -->
+  <script src="websocket.js"></script>
 </body>
 </html>
