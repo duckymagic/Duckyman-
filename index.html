@@ -85,37 +85,31 @@
     </div>
   </div>
 
-  <!-- Fallback Content -->
-  <div id="fallback-content" class="hidden flex flex-col items-center mt-10 text-xl text-white">
-    <p>This app must be opened within Telegram.</p>
-    <a href="https://t.me/duckymagic_bot?start" class="text-blue-500 underline mt-4">Click here to open in Telegram</a>
-  </div>
-
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const loadingSection = document.getElementById("loading-section");
       const telegramContent = document.getElementById("telegram-content");
-      const fallbackContent = document.getElementById("fallback-content");
       const telegramCheck = document.getElementById("telegram-check");
 
-      // Check if the app is opened in Telegram
+      // Check if the app is running in Telegram Mini App environment
       if (window.Telegram && window.Telegram.WebApp) {
-        setTimeout(() => {
-          const tg = window.Telegram.WebApp;
-          tg.ready();
+        const tg = window.Telegram.WebApp;
 
-          // Display Telegram content
+        // Simulate loading
+        setTimeout(() => {
+          tg.ready(); // Signal Telegram that the WebApp is ready
+
+          // Hide the loading section
           loadingSection.classList.add("hidden");
+
+          // Display Telegram-specific content
           telegramContent.classList.remove("hidden");
 
           telegramCheck.innerHTML = `<p class="text-lg text-green-500">You are logged in via Telegram.</p>`;
-        }, 2000); // Wait for the loading animation
+        }, 2000); // Simulate a 2-second loading bar animation
       } else {
-        setTimeout(() => {
-          // Show fallback content if not in Telegram
-          loadingSection.classList.add("hidden");
-          fallbackContent.classList.remove("hidden");
-        }, 2000); // Wait for the loading animation
+        // App is not loaded within Telegram
+        alert("This app must be opened within Telegram.");
       }
 
       // Countdown Timer Logic
