@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DuckyMan</title>
+  <title>DuckyMan Mini App</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+
   <style>
     /* Loading bar animation */
     #loading-bar {
@@ -46,100 +49,60 @@
 
   <!-- Telegram Content -->
   <div id="telegram-content" class="hidden flex flex-col items-center mt-10 text-xl text-white">
-    <div id="telegram-check" class="text-center"></div>
+    <p id="username-display" class="mb-4"></p>
 
-    <!-- Countdown Timer -->
-    <div id="countdown-container" class="grid auto-cols-max grid-flow-col gap-5 text-center mt-6">
-      <div class="flex flex-col">
-        <span id="days" class="countdown font-mono text-5xl">0</span>
-        <span class="text-lg">days</span>
-      </div>
-      <div class="flex flex-col">
-        <span id="hours" class="countdown font-mono text-5xl">0</span>
-        <span class="text-lg">hours</span>
-      </div>
-      <div class="flex flex-col">
-        <span id="minutes" class="countdown font-mono text-5xl">0</span>
-        <span class="text-lg">min</span>
-      </div>
-      <div class="flex flex-col">
-        <span id="seconds" class="countdown font-mono text-5xl">0</span>
-        <span class="text-lg">sec</span>
-      </div>
+    <!-- Example Card -->
+    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+      <div class="text-lg font-semibold text-[#538573ff] mb-4">Welcome to DuckyMan!</div>
+      <p>Enjoy your Mini App experience inside Telegram.</p>
     </div>
+  </div>
 
-    <!-- Grid of Cards -->
-    <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
-      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-        <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
-        <div id="tokens-created-content" class="text-gray-700">Waiting for data...</div>
-      </div>
-      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-        <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
-        <div id="transactions-content" class="text-gray-700">Waiting for data...</div>
-      </div>
-      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-        <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
-        <div id="account-trades-content" class="text-gray-700">Waiting for data...</div>
-      </div>
-    </div>
+  <!-- Fallback Content -->
+  <div id="fallback-content" class="hidden flex flex-col items-center mt-10 text-xl text-white">
+    <h2 class="text-2xl text-red-500 font-bold mb-4">Error: Outside Telegram</h2>
+    <p>This Mini App must be opened within Telegram.</p>
+    <a href="https://t.me/duckymagic_bot?start" class="text-blue-500 underline mt-4">Click here to open in Telegram</a>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const loadingSection = document.getElementById("loading-section");
       const telegramContent = document.getElementById("telegram-content");
-      const telegramCheck = document.getElementById("telegram-check");
+      const fallbackContent = document.getElementById("fallback-content");
+      const usernameDisplay = document.getElementById("username-display");
 
       // Check if the app is running in Telegram Mini App environment
       if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
+        // Initialize Telegram WebApp
+        tg.ready();
+
         // Simulate loading
         setTimeout(() => {
-          tg.ready(); // Signal Telegram that the WebApp is ready
-
-          // Hide the loading section
+          // Hide loading section
           loadingSection.classList.add("hidden");
 
-          // Display Telegram-specific content
+          // Show Telegram-specific content
           telegramContent.classList.remove("hidden");
 
-          telegramCheck.innerHTML = `<p class="text-lg text-green-500">You are logged in via Telegram.</p>`;
-        }, 2000); // Simulate a 2-second loading bar animation
+          // Display user information
+          const user = tg.initDataUnsafe.user;
+          if (user) {
+            const username = user.username || user.first_name || "User";
+            usernameDisplay.textContent = `Hello, @${username}!`;
+          } else {
+            usernameDisplay.textContent = "Hello, Telegram User!";
+          }
+        }, 2000); // Wait for the loading animation
       } else {
-        // App is not loaded within Telegram
-        alert("This app must be opened within Telegram.");
+        // Not running inside Telegram
+        setTimeout(() => {
+          loadingSection.classList.add("hidden");
+          fallbackContent.classList.remove("hidden");
+        }, 2000); // Wait for the loading animation
       }
-
-      // Countdown Timer Logic
-      const targetDate = new Date('2024-12-31T23:59:59Z');
-
-      function updateCountdown() {
-        const now = new Date();
-        const diff = targetDate - now;
-
-        if (diff <= 0) {
-          document.getElementById('days').textContent = 0;
-          document.getElementById('hours').textContent = 0;
-          document.getElementById('minutes').textContent = 0;
-          document.getElementById('seconds').textContent = 0;
-          return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        document.getElementById('days').textContent = days;
-        document.getElementById('hours').textContent = hours;
-        document.getElementById('minutes').textContent = minutes;
-        document.getElementById('seconds').textContent = seconds;
-      }
-
-      setInterval(updateCountdown, 1000);
-      updateCountdown();
     });
   </script>
 </body>
