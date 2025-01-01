@@ -13,6 +13,11 @@
 </head>
 <body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="fixed inset-0 bg-[#1a73e8] text-white text-3xl flex items-center justify-center hidden">
+    Loading...
+  </div>
+
   <!-- Header -->
   <h1 id="header" class="text-[#d6d8d6] font-extrabold text-[calc(1.5rem+4vw)] mt-5 drop-shadow-lg bg-gradient-to-br from-light to-dark bg-clip-text text-stroke-thin"
     style="font-family: 'Luckiest Guy', cursive;">
@@ -20,7 +25,9 @@
   </h1>
 
   <!-- Telegram Check -->
-  <div id="telegram-check" class="mt-6 text-center"></div>
+  <div id="telegram-check" class="mt-6 text-center hidden">
+    <p id="access-message" class="text-2xl text-white"></p>
+  </div>
 
   <!-- Countdown Timer -->
   <div id="countdown-container" class="hidden grid auto-cols-max grid-flow-col gap-5 text-center mt-6">
@@ -63,72 +70,37 @@
     </div>
   </div>
 
+  <!-- JavaScript for Telegram Detection -->
   <script>
-    // Function to check if the app is loaded within Telegram
-    function checkTelegram() {
-      const telegramCheck = document.getElementById('telegram-check');
-      if (window.Telegram && window.Telegram.WebApp) {
-        // Telegram detected
-        console.log("App is loaded within Telegram.");
+    document.addEventListener("DOMContentLoaded", function () {
+      const loadingScreen = document.getElementById("loading-screen");
+      const telegramCheck = document.getElementById("telegram-check");
+      const accessMessage = document.getElementById("access-message");
+      const cardsContainer = document.getElementById("cards-container");
+      const countdownContainer = document.getElementById("countdown-container");
 
-        // Initialize the Telegram WebApp
-        const telegram = window.Telegram.WebApp;
-        telegram.ready();
+      // Show loading screen
+      loadingScreen.classList.remove("hidden");
 
-        // Show Telegram-specific content
-        telegramCheck.innerHTML = `<p class="text-lg text-green-500">You are logged in via Telegram.</p>`;
+      // Simulate a delay for loading
+      setTimeout(() => {
+        const isTelegram = navigator.userAgent.includes("Telegram");
 
-        // Show the app content
-        document.getElementById('countdown-container').classList.remove('hidden');
-        document.getElementById('cards-container').classList.remove('hidden');
-      } else {
-        // Not in Telegram
-        console.log("App is loaded in a regular browser.");
-        telegramCheck.innerHTML = `
-          <p class="text-lg text-red-500">This app must be opened within Telegram.</p>
-          <a href="https://t.me/duckymagic_bot?start" class="text-blue-500 underline">Click here to open in Telegram</a>
-        `;
+        loadingScreen.classList.add("hidden"); // Hide loading screen
 
-        // Hide main content
-        document.getElementById('countdown-container').classList.add('hidden');
-        document.getElementById('cards-container').classList.add('hidden');
-      }
-    }
-
-    // Countdown functionality
-    const targetDate = new Date('2024-12-31T23:59:59Z');
-
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        document.getElementById('days').textContent = 0;
-        document.getElementById('hours').textContent = 0;
-        document.getElementById('minutes').textContent = 0;
-        document.getElementById('seconds').textContent = 0;
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      // Update the countdown values
-      document.getElementById('days').textContent = days;
-      document.getElementById('hours').textContent = hours;
-      document.getElementById('minutes').textContent = minutes;
-      document.getElementById('seconds').textContent = seconds;
-    }
-
-    // Initialize
-    checkTelegram();
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+        if (isTelegram) {
+          // If the user is on Telegram, show content
+          telegramCheck.classList.remove("hidden");
+          accessMessage.textContent = "Welcome to DuckyMan!";
+          cardsContainer.classList.remove("hidden");
+          countdownContainer.classList.remove("hidden");
+        } else {
+          // If the user is not on Telegram, show an error message
+          telegramCheck.classList.remove("hidden");
+          accessMessage.textContent = "Please use Telegram to access this app.";
+        }
+      }, 2000); // Simulate a 2-second loading delay
+    });
   </script>
-
-  <!-- Link to External JavaScript -->
-  <script src="websocket.js"></script>
 </body>
 </html>
