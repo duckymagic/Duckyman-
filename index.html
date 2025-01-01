@@ -49,12 +49,47 @@
 
   <!-- Telegram Content -->
   <div id="telegram-content" class="hidden flex flex-col items-center mt-10 text-xl text-white">
-    <p id="username-display" class="mb-4"></p>
+    <div id="telegram-check" class="text-center"></div>
 
-    <!-- Example Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-[#538573ff] mb-4">Welcome to DuckyMan!</div>
-      <p>Enjoy your Mini App experience inside Telegram.</p>
+    <!-- Countdown Timer -->
+    <div id="countdown-container" class="grid auto-cols-max grid-flow-col gap-5 text-center mt-6">
+      <div class="flex flex-col">
+        <span id="days" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">days</span>
+      </div>
+      <div class="flex flex-col">
+        <span id="hours" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">hours</span>
+      </div>
+      <div class="flex flex-col">
+        <span id="minutes" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">min</span>
+      </div>
+      <div class="flex flex-col">
+        <span id="seconds" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">sec</span>
+      </div>
+    </div>
+
+    <!-- Grid of Cards -->
+    <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
+      <!-- Tokens Created Card -->
+      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+        <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
+        <div id="tokens-created-content" class="text-gray-700">Waiting for data...</div>
+      </div>
+
+      <!-- Transactions Card -->
+      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+        <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
+        <div id="transactions-content" class="text-gray-700">Waiting for data...</div>
+      </div>
+
+      <!-- Account Trades Card -->
+      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+        <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
+        <div id="account-trades-content" class="text-gray-700">Waiting for data...</div>
+      </div>
     </div>
   </div>
 
@@ -70,7 +105,7 @@
       const loadingSection = document.getElementById("loading-section");
       const telegramContent = document.getElementById("telegram-content");
       const fallbackContent = document.getElementById("fallback-content");
-      const usernameDisplay = document.getElementById("username-display");
+      const telegramCheck = document.getElementById("telegram-check");
 
       // Check if the app is running in Telegram Mini App environment
       if (window.Telegram && window.Telegram.WebApp) {
@@ -79,7 +114,6 @@
         // Initialize Telegram WebApp
         tg.ready();
 
-        // Simulate loading
         setTimeout(() => {
           // Hide loading section
           loadingSection.classList.add("hidden");
@@ -87,14 +121,35 @@
           // Show Telegram-specific content
           telegramContent.classList.remove("hidden");
 
-          // Display user information
-          const user = tg.initDataUnsafe.user;
-          if (user) {
-            const username = user.username || user.first_name || "User";
-            usernameDisplay.textContent = `Hello, @${username}!`;
-          } else {
-            usernameDisplay.textContent = "Hello, Telegram User!";
+          telegramCheck.innerHTML = `<p class="text-lg text-green-500">You are logged in via Telegram.</p>`;
+
+          // Countdown Timer Logic
+          const targetDate = new Date('2024-12-31T23:59:59Z');
+          function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+              document.getElementById('days').textContent = 0;
+              document.getElementById('hours').textContent = 0;
+              document.getElementById('minutes').textContent = 0;
+              document.getElementById('seconds').textContent = 0;
+              return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
           }
+
+          setInterval(updateCountdown, 1000);
+          updateCountdown();
         }, 2000); // Wait for the loading animation
       } else {
         // Not running inside Telegram
