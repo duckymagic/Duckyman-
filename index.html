@@ -10,6 +10,25 @@
 
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Loading bar animation */
+    #loading-bar {
+      width: 0;
+      height: 5px;
+      background-color: #538573;
+      animation: loading 2s ease-out forwards;
+    }
+
+    @keyframes loading {
+      from {
+        width: 0%;
+      }
+      to {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
@@ -19,107 +38,115 @@
     DuckyMan
   </h1>
 
-  <!-- Telegram Check -->
-  <div id="telegram-check" class="mt-6 text-center"></div>
+  <!-- Loading Section -->
+  <div id="loading-section" class="flex flex-col items-center mt-10 text-xl text-white">
+    <p>Loading...</p>
+    <div id="loading-bar"></div>
+  </div>
 
-  <!-- Countdown Timer -->
-  <div id="countdown-container" class="hidden grid auto-cols-max grid-flow-col gap-5 text-center mt-6">
-    <div class="flex flex-col">
-      <span id="days" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">days</span>
+  <!-- Telegram Content -->
+  <div id="telegram-content" class="hidden flex flex-col items-center mt-10 text-xl text-white">
+    <div id="telegram-check" class="text-center"></div>
+
+    <!-- Countdown Timer -->
+    <div id="countdown-container" class="grid auto-cols-max grid-flow-col gap-5 text-center mt-6">
+      <div class="flex flex-col">
+        <span id="days" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">days</span>
+      </div>
+      <div class="flex flex-col">
+        <span id="hours" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">hours</span>
+      </div>
+      <div class="flex flex-col">
+        <span id="minutes" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">min</span>
+      </div>
+      <div class="flex flex-col">
+        <span id="seconds" class="countdown font-mono text-5xl">0</span>
+        <span class="text-lg">sec</span>
+      </div>
     </div>
-    <div class="flex flex-col">
-      <span id="hours" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">hours</span>
-    </div>
-    <div class="flex flex-col">
-      <span id="minutes" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">min</span>
-    </div>
-    <div class="flex flex-col">
-      <span id="seconds" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">sec</span>
+
+    <!-- Grid of Cards -->
+    <div id="cards-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
+      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+        <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
+        <div id="tokens-created-content" class="text-gray-700">Waiting for data...</div>
+      </div>
+      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+        <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
+        <div id="transactions-content" class="text-gray-700">Waiting for data...</div>
+      </div>
+      <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
+        <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
+        <div id="account-trades-content" class="text-gray-700">Waiting for data...</div>
+      </div>
     </div>
   </div>
 
-  <!-- Grid of Cards -->
-  <div id="cards-container" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
-    <!-- Tokens Created Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
-      <div id="tokens-created-content" class="text-gray-700">Waiting for data...</div>
-    </div>
-
-    <!-- Transactions Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
-      <div id="transactions-content" class="text-gray-700">Waiting for data...</div>
-    </div>
-
-    <!-- Account Trades Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
-      <div id="account-trades-content" class="text-gray-700">Waiting for data...</div>
-    </div>
+  <!-- Fallback Content -->
+  <div id="fallback-content" class="hidden flex flex-col items-center mt-10 text-xl text-white">
+    <p>This app must be opened within Telegram.</p>
+    <a href="https://t.me/duckymagic_bot?start" class="text-blue-500 underline mt-4">Click here to open in Telegram</a>
   </div>
 
   <script>
-    // Check Telegram integration
-    function checkTelegram() {
-      const telegramCheck = document.getElementById('telegram-check');
+    document.addEventListener("DOMContentLoaded", () => {
+      const loadingSection = document.getElementById("loading-section");
+      const telegramContent = document.getElementById("telegram-content");
+      const fallbackContent = document.getElementById("fallback-content");
+      const telegramCheck = document.getElementById("telegram-check");
+
+      // Check if the app is opened in Telegram
       if (window.Telegram && window.Telegram.WebApp) {
-        console.log("App is loaded within Telegram.");
+        setTimeout(() => {
+          const tg = window.Telegram.WebApp;
+          tg.ready();
 
-        const telegram = window.Telegram.WebApp;
-        telegram.ready();
+          // Display Telegram content
+          loadingSection.classList.add("hidden");
+          telegramContent.classList.remove("hidden");
 
-        // Update UI for Telegram
-        telegramCheck.innerHTML = `<p class="text-lg text-green-500">You are logged in via Telegram.</p>`;
-        document.getElementById('countdown-container').classList.remove('hidden');
-        document.getElementById('cards-container').classList.remove('hidden');
+          telegramCheck.innerHTML = `<p class="text-lg text-green-500">You are logged in via Telegram.</p>`;
+        }, 2000); // Wait for the loading animation
       } else {
-        console.log("App is loaded in a regular browser.");
-        telegramCheck.innerHTML = `
-          <p class="text-lg text-red-500">This app must be opened within Telegram.</p>
-          <a href="https://t.me/duckymagic_bot?start" class="text-blue-500 underline">Click here to open in Telegram</a>
-        `;
-        document.getElementById('countdown-container').classList.add('hidden');
-        document.getElementById('cards-container').classList.add('hidden');
-      }
-    }
-
-    // Countdown Timer
-    const targetDate = new Date('2024-12-31T23:59:59Z');
-
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        document.getElementById('days').textContent = 0;
-        document.getElementById('hours').textContent = 0;
-        document.getElementById('minutes').textContent = 0;
-        document.getElementById('seconds').textContent = 0;
-        return;
+        setTimeout(() => {
+          // Show fallback content if not in Telegram
+          loadingSection.classList.add("hidden");
+          fallbackContent.classList.remove("hidden");
+        }, 2000); // Wait for the loading animation
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      // Countdown Timer Logic
+      const targetDate = new Date('2024-12-31T23:59:59Z');
 
-      document.getElementById('days').textContent = days;
-      document.getElementById('hours').textContent = hours;
-      document.getElementById('minutes').textContent = minutes;
-      document.getElementById('seconds').textContent = seconds;
-    }
+      function updateCountdown() {
+        const now = new Date();
+        const diff = targetDate - now;
 
-    checkTelegram();
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+        if (diff <= 0) {
+          document.getElementById('days').textContent = 0;
+          document.getElementById('hours').textContent = 0;
+          document.getElementById('minutes').textContent = 0;
+          document.getElementById('seconds').textContent = 0;
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = days;
+        document.getElementById('hours').textContent = hours;
+        document.getElementById('minutes').textContent = minutes;
+        document.getElementById('seconds').textContent = seconds;
+      }
+
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+    });
   </script>
-
-  <!-- Link to External JavaScript -->
-  <script src="websocket.js"></script>
 </body>
 </html>
