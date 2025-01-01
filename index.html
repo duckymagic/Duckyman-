@@ -61,38 +61,37 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Debugging: Log the Telegram WebApp object
-      console.log("Telegram WebApp object:", window.Telegram?.WebApp);
-
       const loadingSection = document.getElementById("loading-section");
       const telegramContent = document.getElementById("telegram-content");
       const fallbackContent = document.getElementById("fallback-content");
+      const usernameDisplay = document.getElementById("username-display");
 
       // Check if Telegram WebApp is available
       if (typeof window.Telegram !== "undefined" && window.Telegram.WebApp) {
-        console.log("Telegram WebApp detected.");
         const tg = window.Telegram.WebApp;
 
         // Initialize Telegram WebApp
         tg.ready();
 
-        // Hide the loading section
-        loadingSection.classList.add("hidden");
+        // Hide loading section after a delay
+        setTimeout(() => {
+          loadingSection.classList.add("hidden");
 
-        // Show Telegram user content
-        const user = tg.initDataUnsafe?.user;
-        document.getElementById("username-display").textContent =
-          user
-            ? `Hello, @${user.username || user.first_name || "Guest"}! Welcome to DuckyMan!`
-            : "Welcome to DuckyMan!";
-        telegramContent.classList.remove("hidden");
+          // Retrieve user information
+          const user = tg.initDataUnsafe?.user;
+          if (user) {
+            usernameDisplay.textContent = `Hello, @${user.username || user.first_name || "Guest"}! Welcome to DuckyMan!`;
+            telegramContent.classList.remove("hidden");
+          } else {
+            fallbackContent.classList.remove("hidden");
+          }
+        }, 2000); // Simulated delay
       } else {
-        console.log("Telegram WebApp not detected.");
-        // Hide the loading section
-        loadingSection.classList.add("hidden");
-
-        // Show fallback content
-        fallbackContent.classList.remove("hidden");
+        // Telegram WebApp is not available
+        setTimeout(() => {
+          loadingSection.classList.add("hidden");
+          fallbackContent.classList.remove("hidden");
+        }, 2000);
       }
     });
   </script>
