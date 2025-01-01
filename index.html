@@ -10,25 +10,6 @@
 
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    /* Loading bar animation */
-    #loading-bar {
-      width: 0;
-      height: 5px;
-      background-color: #538573;
-      animation: loading 2s ease-out forwards;
-    }
-
-    @keyframes loading {
-      from {
-        width: 0%;
-      }
-      to {
-        width: 100%;
-      }
-    }
-  </style>
 </head>
 <body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
@@ -38,66 +19,67 @@
     DuckyMan
   </h1>
 
-  <!-- Loading Section -->
-  <div id="loading-section" class="flex flex-col items-center mt-10 text-xl text-white">
-    <p>Loading...</p>
-    <div id="loading-bar"></div>
+  <!-- Countdown Component -->
+  <div class="grid auto-cols-max grid-flow-col gap-5 text-center mt-10">
+    <div class="flex flex-col">
+      <span class="countdown font-mono text-5xl">
+        <span data-count="days" style="--value:0;"></span>
+      </span>
+      days
+    </div>
+    <div class="flex flex-col">
+      <span class="countdown font-mono text-5xl">
+        <span data-count="hours" style="--value:0;"></span>
+      </span>
+      hours
+    </div>
+    <div class="flex flex-col">
+      <span class="countdown font-mono text-5xl">
+        <span data-count="minutes" style="--value:0;"></span>
+      </span>
+      min
+    </div>
+    <div class="flex flex-col">
+      <span class="countdown font-mono text-5xl">
+        <span data-count="seconds" style="--value:0;"></span>
+      </span>
+      sec
+    </div>
   </div>
 
-  <!-- Telegram User Content -->
-  <div id="telegram-content" class="hidden mt-10 text-center text-xl text-white">
-    <p id="username-display"></p>
-  </div>
-
-  <!-- Non-Telegram Fallback -->
-  <div id="fallback-content" class="hidden mt-10 text-center text-xl text-white">
-    <p>Sorry, this page can only be accessed from Telegram.</p>
-    <p>
-      <a href="https://t.me/YourBotUsername" class="underline text-blue-400" target="_blank">
-        Click here to open the bot on Telegram
-      </a>
-    </p>
-  </div>
-
+  <!-- JavaScript for Countdown -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const loadingSection = document.getElementById("loading-section");
-      const telegramContent = document.getElementById("telegram-content");
-      const fallbackContent = document.getElementById("fallback-content");
-      const usernameDisplay = document.getElementById("username-display");
+    // Set the countdown target date
+    const targetDate = new Date('2024-12-31T23:59:59Z');
 
-      // Check if Telegram WebApp is available
-      if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
+    // Function to update the countdown
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
 
-        // Simulate loading and check Telegram WebApp readiness
-        setTimeout(() => {
-          tg.ready();
-
-          // Hide the loading section
-          loadingSection.classList.add("hidden");
-
-          // Get user data
-          const user = tg.initDataUnsafe.user;
-          if (user) {
-            const username = user.username || user.first_name || "Unknown User";
-            usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
-
-            // Show Telegram user content
-            telegramContent.classList.remove("hidden");
-          } else {
-            // If user data is missing, fallback to the error message
-            fallbackContent.classList.remove("hidden");
-          }
-        }, 2000); // Adjust loading time as needed
-      } else {
-        // If Telegram WebApp API is not available, show fallback content
-        setTimeout(() => {
-          loadingSection.classList.add("hidden");
-          fallbackContent.classList.remove("hidden");
-        }, 2000);
+      if (diff <= 0) {
+        document.querySelector('[data-count="days"]').setAttribute('style', '--value:0;');
+        document.querySelector('[data-count="hours"]').setAttribute('style', '--value:0;');
+        document.querySelector('[data-count="minutes"]').setAttribute('style', '--value:0;');
+        document.querySelector('[data-count="seconds"]').setAttribute('style', '--value:0;');
+        return;
       }
-    });
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      // Update the countdown values dynamically
+      document.querySelector('[data-count="days"]').setAttribute('style', `--value:${days};`);
+      document.querySelector('[data-count="hours"]').setAttribute('style', `--value:${hours};`);
+      document.querySelector('[data-count="minutes"]').setAttribute('style', `--value:${minutes};`);
+      document.querySelector('[data-count="seconds"]').setAttribute('style', `--value:${seconds};`);
+    }
+
+    // Update the countdown every second
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // Run initially to avoid delay
   </script>
 </body>
 </html>
