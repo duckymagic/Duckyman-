@@ -12,17 +12,28 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
-    // Parse the query string to get the username
-    const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('username');
+    // Use Telegram Web App API to get user data
+    document.addEventListener("DOMContentLoaded", () => {
+      // Check if Telegram WebApp is available
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
 
-    // Dynamically update the content based on the username
-    document.addEventListener('DOMContentLoaded', () => {
-      const usernameDisplay = document.getElementById('username-display');
-      if (username) {
-        usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+        // Ensure WebApp is initialized
+        tg.ready();
+
+        // Get user data from Telegram WebApp
+        const user = tg.initDataUnsafe.user;
+
+        // Dynamically update the content with the user data
+        const usernameDisplay = document.getElementById("username-display");
+        if (user) {
+          const username = user.username || user.first_name || "Unknown User";
+          usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+        } else {
+          usernameDisplay.textContent = "Unable to retrieve user information.";
+        }
       } else {
-        usernameDisplay.textContent = "Welcome to the DuckyMan Web App!";
+        console.error("Telegram Web App API not available.");
       }
     });
   </script>
@@ -37,13 +48,7 @@
 
   <!-- Dynamic Welcome Message -->
   <div class="mt-10 text-center text-xl text-white">
-    <p id="username-display">Welcome to the DuckyMan Web App!</p>
-  </div>
-
-  <!-- Main Content -->
-  <div class="mt-10 text-center">
-    <p>Explore the features of the app below!</p>
-    <!-- Add your app's main content here -->
+    <p id="username-display">Loading...</p>
   </div>
 </body>
 </html>
