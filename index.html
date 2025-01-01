@@ -11,132 +11,39 @@
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-    /* Loading bar animation */
-    @keyframes loading {
-      0% {
-        width: 0%;
+  <script>
+    // Parse the query string to get the username
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+
+    // Dynamically update the content based on the username
+    document.addEventListener('DOMContentLoaded', () => {
+      const usernameDisplay = document.getElementById('username-display');
+      if (username) {
+        usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+      } else {
+        usernameDisplay.textContent = "Welcome to the DuckyMan Web App!";
       }
-      100% {
-        width: 100%;
-      }
-    }
-    .loading-bar {
-      animation: loading 2s linear infinite;
-    }
-  </style>
+    });
+  </script>
 </head>
 <body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
-  <!-- Loading Screen -->
-  <div id="loading-screen" class="fixed inset-0 bg-[#99c2b0ff] text-white flex flex-col items-center justify-center space-y-4 hidden">
-    <p class="text-3xl font-bold">Loading...</p>
-    <div class="w-3/4 bg-white rounded-full h-4 overflow-hidden">
-      <div class="bg-[#1a73e8] h-full rounded-full loading-bar"></div>
-    </div>
-  </div>
-
   <!-- Header -->
-  <h1 id="header" class="text-[#d6d8d6] font-extrabold text-[calc(1.5rem+4vw)] mt-5 drop-shadow-lg bg-gradient-to-br from-light to-dark bg-clip-text text-stroke-thin"
+  <h1 class="text-[#d6d8d6] font-extrabold text-[calc(1.5rem+4vw)] mt-5 drop-shadow-lg bg-gradient-to-br from-light to-dark bg-clip-text text-stroke-thin"
     style="font-family: 'Luckiest Guy', cursive;">
     DuckyMan
   </h1>
 
-  <!-- Telegram Check -->
-  <div id="telegram-check" class="mt-6 text-center hidden">
-    <p id="access-message" class="text-2xl text-white"></p>
+  <!-- Dynamic Welcome Message -->
+  <div class="mt-10 text-center text-xl text-white">
+    <p id="username-display">Welcome to the DuckyMan Web App!</p>
   </div>
 
-  <!-- Countdown Timer -->
-  <div id="countdown-container" class="hidden grid auto-cols-max grid-flow-col gap-5 text-center mt-6">
-    <div class="flex flex-col">
-      <span id="days" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">days</span>
-    </div>
-    <div class="flex flex-col">
-      <span id="hours" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">hours</span>
-    </div>
-    <div class="flex flex-col">
-      <span id="minutes" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">min</span>
-    </div>
-    <div class="flex flex-col">
-      <span id="seconds" class="countdown font-mono text-5xl">0</span>
-      <span class="text-lg">sec</span>
-    </div>
+  <!-- Main Content -->
+  <div class="mt-10 text-center">
+    <p>Explore the features of the app below!</p>
+    <!-- Add your app's main content here -->
   </div>
-
-  <!-- Grid of Cards -->
-  <div id="cards-container" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 w-full mt-6">
-    <!-- Tokens Created Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-[#538573ff] mb-4">Tokens Created</div>
-      <div id="tokens-created-content" class="text-gray-700">Waiting for data...</div>
-    </div>
-
-    <!-- Transactions Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-[#538573ff] mb-4">Transactions</div>
-      <div id="transactions-content" class="text-gray-700">Waiting for data...</div>
-    </div>
-
-    <!-- Account Trades Card -->
-    <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-[#538573ff] mb-4">Account Trades</div>
-      <div id="account-trades-content" class="text-gray-700">Waiting for data...</div>
-    </div>
-  </div>
-
-  <!-- Telegram Login Widget -->
-  <script async src="https://telegram.org/js/telegram-widget.js?7"
-    data-telegram-login="YOUR_BOT_USERNAME" 
-    data-size="large" 
-    data-radius="10" 
-    data-auth-url="https://your-backend.com/telegram-auth" 
-    data-request-access="write"></script>
-
-  <!-- JavaScript for Telegram Detection -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const loadingScreen = document.getElementById("loading-screen");
-      const telegramCheck = document.getElementById("telegram-check");
-      const accessMessage = document.getElementById("access-message");
-      const cardsContainer = document.getElementById("cards-container");
-      const countdownContainer = document.getElementById("countdown-container");
-
-      // Show loading screen
-      loadingScreen.classList.remove("hidden");
-
-      // Simulate a delay for loading
-      setTimeout(() => {
-        const isTelegram = navigator.userAgent.includes("Telegram");
-
-        loadingScreen.classList.add("hidden"); // Hide loading screen
-
-        if (isTelegram) {
-          // If the user is on Telegram, show content
-          telegramCheck.classList.remove("hidden");
-          accessMessage.textContent = "Welcome to DuckyMan!";
-          cardsContainer.classList.remove("hidden");
-          countdownContainer.classList.remove("hidden");
-
-          // Wait for Telegram login info from the widget
-          window.Telegram.WebApp.ready();
-          window.Telegram.WebApp.MainButton.text = "Fetching user info...";
-          window.Telegram.WebApp.MainButton.show();
-
-          const user = window.Telegram.WebApp.initDataUnsafe.user;
-          if (user && user.username) {
-            accessMessage.textContent = `Welcome to DuckyMan, @${user.username}!`;
-          }
-        } else {
-          // If the user is not on Telegram, show an error message
-          telegramCheck.classList.remove("hidden");
-          accessMessage.textContent = "Please use Telegram to access this app.";
-        }
-      }, 2000); // Simulate a 2-second loading delay
-    });
-  </script>
 </body>
 </html>
