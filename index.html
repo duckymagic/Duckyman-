@@ -11,32 +11,24 @@
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <script>
-    // Use Telegram Web App API to get user data
-    document.addEventListener("DOMContentLoaded", () => {
-      // Check if Telegram WebApp is available
-      if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
+  <style>
+    /* Loading bar animation */
+    #loading-bar {
+      width: 0;
+      height: 5px;
+      background-color: #538573;
+      animation: loading 3s linear infinite;
+    }
 
-        // Ensure WebApp is initialized
-        tg.ready();
-
-        // Get user data from Telegram WebApp
-        const user = tg.initDataUnsafe.user;
-
-        // Dynamically update the content with the user data
-        const usernameDisplay = document.getElementById("username-display");
-        if (user) {
-          const username = user.username || user.first_name || "Unknown User";
-          usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
-        } else {
-          usernameDisplay.textContent = "Unable to retrieve user information.";
-        }
-      } else {
-        console.error("Telegram Web App API not available.");
+    @keyframes loading {
+      from {
+        width: 0%;
       }
-    });
-  </script>
+      to {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
@@ -46,9 +38,55 @@
     DuckyMan
   </h1>
 
-  <!-- Dynamic Welcome Message -->
-  <div class="mt-10 text-center text-xl text-white">
-    <p id="username-display">Loading...</p>
+  <!-- Loading Section -->
+  <div id="loading-section" class="flex flex-col items-center mt-10 text-xl text-white">
+    <p>Loading...</p>
+    <div id="loading-bar"></div>
   </div>
+
+  <!-- Dynamic Welcome Message -->
+  <div id="username-display" class="mt-10 text-center text-xl text-white hidden">
+    <!-- Dynamic content will appear here -->
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loadingSection = document.getElementById("loading-section");
+      const usernameDisplay = document.getElementById("username-display");
+
+      // Check if Telegram Web App API is available
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+
+        // Ensure Telegram Web App is ready
+        tg.ready();
+
+        // Get the user's information
+        const user = tg.initDataUnsafe.user;
+
+        // Simulate loading delay
+        setTimeout(() => {
+          // Hide the loading section
+          loadingSection.classList.add("hidden");
+
+          // Show the username display
+          usernameDisplay.classList.remove("hidden");
+
+          if (user) {
+            const username = user.username || user.first_name || "Unknown User";
+            usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+          } else {
+            usernameDisplay.textContent = "Welcome to the DuckyMan Web App! Unable to retrieve user information.";
+          }
+        }, 2000); // Adjust delay time if necessary
+      } else {
+        // Handle case where Telegram Web App API is not available
+        loadingSection.classList.add("hidden");
+        usernameDisplay.classList.remove("hidden");
+        usernameDisplay.textContent = "Error: Telegram Web App API not available.";
+      }
+    });
+  </script>
 </body>
 </html>
