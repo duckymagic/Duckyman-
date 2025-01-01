@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://telegram.org https://cdn.tailwindcss.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com;">
-  <meta name="theme-color" content="#619990">
   <title>DuckyMan Mini App</title>
 
   <!-- Google Fonts -->
@@ -15,20 +13,6 @@
 
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // TailwindCSS Config
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            light: '#99c2b0',
-            dark: '#619990',
-            accent: '#538573',
-          },
-        },
-      },
-    };
-  </script>
 
   <style>
     /* Loading bar animation */
@@ -53,7 +37,7 @@
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-light to-dark min-h-screen flex flex-col items-center">
+<body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
   <!-- Header -->
   <h1 id="header" class="text-[#d6d8d6] font-extrabold text-[calc(1.5rem+4vw)] mt-5 drop-shadow-lg bg-gradient-to-br from-light to-dark bg-clip-text text-stroke-thin"
@@ -73,7 +57,7 @@
 
     <!-- Example Card -->
     <div class="bg-[#d6d8d6ff] p-6 rounded-lg shadow-lg border border-white">
-      <div class="text-lg font-semibold text-accent mb-4">Welcome to DuckyMan!</div>
+      <div class="text-lg font-semibold text-[#538573ff] mb-4">Welcome to DuckyMan!</div>
       <p>Enjoy your Mini App experience inside Telegram.</p>
     </div>
   </div>
@@ -87,13 +71,9 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const loadingSection = document.getElementById("loading-section");
-      const loadingBar = document.getElementById("loading-bar");
       const telegramContent = document.getElementById("telegram-content");
       const fallbackContent = document.getElementById("fallback-content");
       const usernameDisplay = document.getElementById("username-display");
-
-      // Animate loading bar
-      loadingBar.style.width = '100%';
 
       // Check if the app is running in Telegram
       if (window.Telegram && window.Telegram.WebApp) {
@@ -125,10 +105,10 @@
           fallbackContent.classList.remove("hidden");
         }, 2000); // Wait for the loading animation
 
-        // Redirect if desired
+        // Redirect to Telegram after fallback message
         setTimeout(() => {
           window.location.href = "https://t.me/duckymagic_bot?start";
-        }, 5000); // Redirect to Telegram after showing the fallback message
+        }, 5000); // Redirect after 5 seconds
       }
     });
   </script>
