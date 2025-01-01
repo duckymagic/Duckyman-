@@ -10,6 +10,22 @@
 
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    // Parse the query string to get the username
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+
+    // Dynamically update the content based on the username
+    document.addEventListener('DOMContentLoaded', () => {
+      const usernameDisplay = document.getElementById('username-display');
+      if (username) {
+        usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+      } else {
+        usernameDisplay.textContent = "Welcome to the DuckyMan Web App!";
+      }
+    });
+  </script>
 </head>
 <body class="bg-gradient-to-br from-[#99c2b0ff] to-[#619990ff] min-h-screen flex flex-col items-center">
 
@@ -19,67 +35,15 @@
     DuckyMan
   </h1>
 
-  <!-- Countdown Component -->
-  <div class="grid auto-cols-max grid-flow-col gap-5 text-center mt-10">
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="days" style="--value:0;"></span>
-      </span>
-      days
-    </div>
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="hours" style="--value:0;"></span>
-      </span>
-      hours
-    </div>
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="minutes" style="--value:0;"></span>
-      </span>
-      min
-    </div>
-    <div class="flex flex-col">
-      <span class="countdown font-mono text-5xl">
-        <span data-count="seconds" style="--value:0;"></span>
-      </span>
-      sec
-    </div>
+  <!-- Dynamic Welcome Message -->
+  <div class="mt-10 text-center text-xl text-white">
+    <p id="username-display">Welcome to the DuckyMan Web App!</p>
   </div>
 
-  <!-- JavaScript for Countdown -->
-  <script>
-    // Set the countdown target date
-    const targetDate = new Date('2024-12-31T23:59:59Z');
-
-    // Function to update the countdown
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
-
-      if (diff <= 0) {
-        document.querySelector('[data-count="days"]').setAttribute('style', '--value:0;');
-        document.querySelector('[data-count="hours"]').setAttribute('style', '--value:0;');
-        document.querySelector('[data-count="minutes"]').setAttribute('style', '--value:0;');
-        document.querySelector('[data-count="seconds"]').setAttribute('style', '--value:0;');
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      // Update the countdown values dynamically
-      document.querySelector('[data-count="days"]').setAttribute('style', `--value:${days};`);
-      document.querySelector('[data-count="hours"]').setAttribute('style', `--value:${hours};`);
-      document.querySelector('[data-count="minutes"]').setAttribute('style', `--value:${minutes};`);
-      document.querySelector('[data-count="seconds"]').setAttribute('style', `--value:${seconds};`);
-    }
-
-    // Update the countdown every second
-    setInterval(updateCountdown, 1000);
-    updateCountdown(); // Run initially to avoid delay
-  </script>
+  <!-- Main Content -->
+  <div class="mt-10 text-center">
+    <p>Explore the features of the app below!</p>
+    <!-- Add your app's main content here -->
+  </div>
 </body>
 </html>
