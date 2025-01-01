@@ -12,12 +12,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Green Loading Bar */
+    /* Loading bar animation */
     #loading-bar {
       width: 0;
       height: 5px;
-      background-color: #538573; /* Green loading bar */
-      animation: loading 2s linear forwards;
+      background-color: #538573;
+      animation: loading 2s ease-out forwards;
     }
 
     @keyframes loading {
@@ -53,7 +53,7 @@
   <div id="fallback-content" class="hidden mt-10 text-center text-xl text-white">
     <p>Sorry, this page can only be accessed from Telegram.</p>
     <p>
-      <a href="https://t.me/duckymagic_bot" class="underline text-blue-400" target="_blank">
+      <a href="https://t.me/YourBotUsername" class="underline text-blue-400" target="_blank">
         Click here to open the bot on Telegram
       </a>
     </p>
@@ -66,28 +66,32 @@
       const fallbackContent = document.getElementById("fallback-content");
       const usernameDisplay = document.getElementById("username-display");
 
-      // Detect Telegram WebApp
+      // Check if Telegram WebApp is available
       if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
-        // Initialize Telegram WebApp
-        tg.ready();
-
         // Simulate loading and check Telegram WebApp readiness
         setTimeout(() => {
+          tg.ready();
+
+          // Hide the loading section
           loadingSection.classList.add("hidden");
 
-          // Retrieve user information
-          const user = tg.initDataUnsafe?.user;
+          // Get user data
+          const user = tg.initDataUnsafe.user;
           if (user) {
-            usernameDisplay.textContent = `Hello, @${user.username || user.first_name || "Guest"}! Welcome to DuckyMan!`;
+            const username = user.username || user.first_name || "Unknown User";
+            usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+
+            // Show Telegram user content
             telegramContent.classList.remove("hidden");
           } else {
+            // If user data is missing, fallback to the error message
             fallbackContent.classList.remove("hidden");
           }
-        }, 2000);
+        }, 2000); // Adjust loading time as needed
       } else {
-        // Show fallback content for non-Telegram environments
+        // If Telegram WebApp API is not available, show fallback content
         setTimeout(() => {
           loadingSection.classList.add("hidden");
           fallbackContent.classList.remove("hidden");
