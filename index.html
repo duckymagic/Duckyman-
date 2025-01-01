@@ -75,40 +75,42 @@
       const fallbackContent = document.getElementById("fallback-content");
       const usernameDisplay = document.getElementById("username-display");
 
-      // Prevent the app from being accessed outside Telegram
-      if (!window.Telegram || !window.Telegram.WebApp) {
-        console.error("This app can only be accessed within Telegram.");
-        document.body.innerHTML = `
-          <div class="flex flex-col items-center justify-center h-screen text-center text-white bg-red-600">
-            <h1 class="text-3xl font-bold mb-4">Access Denied</h1>
-            <p class="mb-4">This Mini App must be opened within Telegram.</p>
-            <a href="https://t.me/duckymagic_bot?start" class="text-blue-500 underline text-lg">Open in Telegram</a>
-          </div>
-        `;
-        return;
-      }
+      // Check if the app is running in Telegram
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
 
-      // If running inside Telegram
-      const tg = window.Telegram.WebApp;
+        // Initialize Telegram WebApp
+        tg.ready();
 
-      // Initialize Telegram WebApp
-      tg.ready();
-
-      setTimeout(() => {
-        // Hide the loading section
-        loadingSection.classList.add("hidden");
-
-        // Show Telegram-specific content
-        telegramContent.classList.remove("hidden");
-
-        // Display user information
+        // Check if Telegram user data is available
         const user = tg.initDataUnsafe?.user;
-        if (user) {
-          usernameDisplay.textContent = `Hello, @${user.username || user.first_name || "Telegram User"}!`;
-        } else {
-          usernameDisplay.textContent = "Hello, Telegram User!";
+        if (!user || !user.username) {
+          // User data not available; show fallback content
+          console.warn("No Telegram user data detected.");
+          loadingSection.classList.add("hidden");
+          fallbackContent.classList.remove("hidden");
+          return;
         }
-      }, 2000); // Wait for the loading animation
+
+        // Show Telegram content if valid user data is present
+        setTimeout(() => {
+          loadingSection.classList.add("hidden");
+          telegramContent.classList.remove("hidden");
+          usernameDisplay.textContent = `Hello, @${user.username || user.first_name}!`;
+        }, 2000); // Wait for loading animation
+      } else {
+        // Not running inside Telegram
+        console.warn("Not inside Telegram. Showing fallback content.");
+        setTimeout(() => {
+          loadingSection.classList.add("hidden");
+          fallbackContent.classList.remove("hidden");
+        }, 2000); // Wait for loading animation
+
+        // Redirect to Telegram after fallback message
+        setTimeout(() => {
+          window.location.href = "https://t.me/duckymagic_bot?start";
+        }, 5000); // Redirect after 5 seconds
+      }
     });
   </script>
 
