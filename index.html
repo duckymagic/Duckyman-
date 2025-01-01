@@ -17,7 +17,7 @@
       width: 0;
       height: 5px;
       background-color: #538573;
-      animation: loading 3s linear infinite;
+      animation: loading 2s ease-out forwards;
     }
 
     @keyframes loading {
@@ -44,47 +44,58 @@
     <div id="loading-bar"></div>
   </div>
 
-  <!-- Dynamic Welcome Message -->
-  <div id="username-display" class="mt-10 text-center text-xl text-white hidden">
-    <!-- Dynamic content will appear here -->
+  <!-- Telegram User Content -->
+  <div id="telegram-content" class="hidden mt-10 text-center text-xl text-white">
+    <p id="username-display"></p>
   </div>
 
-  <!-- JavaScript -->
+  <!-- Non-Telegram Fallback -->
+  <div id="fallback-content" class="hidden mt-10 text-center text-xl text-white">
+    <p>Sorry, this page can only be accessed from Telegram.</p>
+    <p>
+      <a href="https://t.me/duckymagic_bot" class="underline text-blue-400" target="_blank">
+        Click here to open the bot on Telegram
+      </a>
+    </p>
+  </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const loadingSection = document.getElementById("loading-section");
+      const telegramContent = document.getElementById("telegram-content");
+      const fallbackContent = document.getElementById("fallback-content");
       const usernameDisplay = document.getElementById("username-display");
 
-      // Check if Telegram Web App API is available
+      // Check if Telegram WebApp is available
       if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
 
-        // Ensure Telegram Web App is ready
-        tg.ready();
-
-        // Get the user's information
-        const user = tg.initDataUnsafe.user;
-
-        // Simulate loading delay
+        // Simulate loading and check Telegram WebApp readiness
         setTimeout(() => {
+          tg.ready();
+
           // Hide the loading section
           loadingSection.classList.add("hidden");
 
-          // Show the username display
-          usernameDisplay.classList.remove("hidden");
-
+          // Get user data
+          const user = tg.initDataUnsafe.user;
           if (user) {
             const username = user.username || user.first_name || "Unknown User";
             usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+
+            // Show Telegram user content
+            telegramContent.classList.remove("hidden");
           } else {
-            usernameDisplay.textContent = "Welcome to the DuckyMan Web App! Unable to retrieve user information.";
+            // If user data is missing, fallback to the error message
+            fallbackContent.classList.remove("hidden");
           }
-        }, 2000); // Adjust delay time if necessary
+        }, 2000); // Adjust loading time as needed
       } else {
-        // Handle case where Telegram Web App API is not available
-        loadingSection.classList.add("hidden");
-        usernameDisplay.classList.remove("hidden");
-        usernameDisplay.textContent = "Error: Telegram Web App API not available.";
+        // If Telegram WebApp API is not available, show fallback content
+        setTimeout(() => {
+          loadingSection.classList.add("hidden");
+          fallbackContent.classList.remove("hidden");
+        }, 2000);
       }
     });
   </script>
