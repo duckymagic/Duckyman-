@@ -12,17 +12,25 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
-    // Parse the query string to get the username
-    const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('username');
+    // Check Telegram Web App context for user data
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
 
-    // Dynamically update the content based on the username
-    document.addEventListener('DOMContentLoaded', () => {
-      const usernameDisplay = document.getElementById('username-display');
-      if (username) {
-        usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
-      } else {
-        usernameDisplay.textContent = "Welcome to the DuckyMan Web App!";
+        // Ensure WebApp is initialized
+        tg.ready();
+
+        // Get the user's first name or username
+        const user = tg.initDataUnsafe.user;
+        const username = user ? user.username || user.first_name : null;
+
+        // Display the username or a default message
+        const usernameDisplay = document.getElementById("username-display");
+        if (username) {
+          usernameDisplay.textContent = `Hello, @${username}! Welcome to the DuckyMan Web App!`;
+        } else {
+          usernameDisplay.textContent = "Welcome to the DuckyMan Web App! Unable to retrieve username.";
+        }
       }
     });
   </script>
@@ -35,15 +43,26 @@
     DuckyMan
   </h1>
 
-  <!-- Dynamic Welcome Message -->
-  <div class="mt-10 text-center text-xl text-white">
-    <p id="username-display">Welcome to the DuckyMan Web App!</p>
+  <!-- Loading Page -->
+  <div class="loading mt-10 text-center text-xl text-white" id="loading-message">
+    <p>Loading...</p>
   </div>
 
-  <!-- Main Content -->
-  <div class="mt-10 text-center">
-    <p>Explore the features of the app below!</p>
-    <!-- Add your app's main content here -->
-  </div>
+  <!-- Dynamic Welcome Message -->
+  <div class="mt-10 text-center text-xl text-white hidden" id="username-display"></div>
+
+  <script>
+    // Hide the loading message after retrieving the username
+    document.addEventListener("DOMContentLoaded", () => {
+      const loadingMessage = document.getElementById("loading-message");
+      const usernameDisplay = document.getElementById("username-display");
+
+      // Simulate a short delay for loading
+      setTimeout(() => {
+        loadingMessage.classList.add("hidden");
+        usernameDisplay.classList.remove("hidden");
+      }, 2000);
+    });
+  </script>
 </body>
 </html>
